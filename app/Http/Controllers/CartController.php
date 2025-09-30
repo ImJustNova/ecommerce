@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class CartController extends Controller
 {
@@ -81,8 +83,8 @@ class CartController extends Controller
         session()->forget('cart');
         return redirect()->route('cart.index')->with('success', 'Cart cleared.');
     }
-
-    // PLACE ORDER (simple) — optional, uses an 'orders' table; see notes below
+    
+    // place order
     public function placeOrder(Request $request)
     {
         $cart = session()->get('cart', []);
@@ -90,9 +92,24 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart is empty.');
         }
 
-        // If you have an orders table + order_items, implement DB save here.
-        // For now, we'll just clear the cart and flash success (quick demo).
+        // Create order
+        $order = Order::create([
+            'customer_name' => 'Guest User', // later: use auth user
+            'status' => 'pending',
+        ]);
+
+        // Save items
+        foreach ($cart as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item['id'],
+                'quantity' => $item['qty'],
+                'price' => $item['price'],
+            ]);
+        }
+
         session()->forget('cart');
-        return redirect()->route('catalogue')->with('success', 'Order placed (demo). Implement DB save to persist orders).');
+
+        return redirect()->route('orders.index')->with('success', 'Order placed successfully!');
     }
 }

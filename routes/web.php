@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/welcome', function () {
     return view('welcome');
@@ -20,3 +21,5 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 
 // Place order (demo)
 Route::post('/order/place', [CartController::class, 'placeOrder'])->name('order.place');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
