@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // show catalogue
-    public function index()
+    // Show catalogue
+    public function index(Request $request)
     {
-        // get all products (change to paginate() later if needed)
-        $products = Product::all();
+        $query = Product::query();
 
-        // pass products to the view
+        //search
+        if ($request->has('search') && $request->search !== '') {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->get();
+
         return view('catalogue', compact('products'));
     }
 }

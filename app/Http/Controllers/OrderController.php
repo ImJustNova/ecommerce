@@ -20,6 +20,6 @@ class OrderController extends Controller
         $order->status = $request->input('status', 'pending');
         $order->save();
 
-        return redirect()->route('index')->with('success', 'Order status updated.');
+        return redirect()->route('orders.index')->with('success', 'Order status updated.');
     }
 }
