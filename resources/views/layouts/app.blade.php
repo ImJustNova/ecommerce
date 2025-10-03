@@ -7,12 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div id="navbar">
-    <navbar-component 
-        :cart-count="{{ $cartCount ?? 0 }}" 
-        :show-search='@json(request()->routeIs("catalogue"))'>
-    </navbar-component>
-
+    <div id="app">
+        <navbar-component 
+            :cart-count="{{ $cartCount ?? 0 }}" 
+            :show-search="{{ json_encode(request()->routeIs('catalogue')) }}">
+        </navbar-component>
     </div>
 
     <div class="container">
@@ -22,6 +21,4 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </body>
-
-
 </html>
