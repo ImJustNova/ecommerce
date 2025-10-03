@@ -21,7 +21,7 @@
             <h5 class="product-title">{{ product.name }}</h5>
             
             <div class="product-price">
-              <span class="price-currency">RM</span>
+              <span class="price-currency">$</span>
               <span class="price-amount">{{ formatPrice(product.price) }}</span>
             </div>
 
@@ -124,24 +124,38 @@ export default {
       this.loadingProducts[productId] = true;
 
       try {
+        // Get CSRF token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        
+        if (!csrfToken) {
+          console.error('CSRF token not found');
+          this.showToastNotification('Security token missing. Please refresh the page.', 'error');
+          this.loadingProducts[productId] = false;
+          return;
+        }
+
         const response = await fetch(`/cart/add/${productId}`, {
           method: "POST",
           headers: {
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-            "Content-Type": "application/json"
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json",
+            "Accept": "application/json"
           }
         });
 
         if (response.ok) {
           this.showToastNotification('Product added to cart! 🎉', 'success');
-          // Emit event to update cart count in navbar
-          this.$emit('cart-updated');
+          // Update cart count globally
+          if (window.cartState) {
+            window.cartState.count++;
+          }
         } else {
-          this.showToastNotification('Failed to add product', 'error');
+          const errorData = await response.json().catch(() => ({}));
+          this.showToastNotification(errorData.message || 'Failed to add product', 'error');
         }
       } catch (error) {
-        console.error(error);
-        this.showToastNotification('An error occurred', 'error');
+        console.error('Add to cart error:', error);
+        this.showToastNotification('An error occurred. Please try again.', 'error');
       } finally {
         this.loadingProducts[productId] = false;
       }
@@ -237,6 +251,7 @@ export default {
 .price-currency {
   font-size: 2rem;
   font-weight: 700;
+  color: #6c757d;
   margin-right: 4px;
 }
 
