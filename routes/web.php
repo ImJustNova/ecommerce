@@ -9,7 +9,7 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-//catalogue route
+// Catalogue route (homepage)
 Route::get('/', [ProductController::class, 'index'])->name('catalogue');
 
 // Cart routes
@@ -19,7 +19,9 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
-// Place order (demo)
+// Place order 
 Route::post('/order/place', [CartController::class, 'placeOrder'])->name('order.place');
+
+// Orders
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::post('/orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
