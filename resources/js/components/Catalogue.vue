@@ -21,7 +21,7 @@
             <h5 class="product-title">{{ product.name }}</h5>
             
             <div class="product-price">
-              <span class="price-currency">RM</span>
+              <span class="price-currency">$</span>
               <span class="price-amount">{{ formatPrice(product.price) }}</span>
             </div>
 
@@ -96,11 +96,19 @@ export default {
       };
       
       const lowerName = name.toLowerCase();
-      for (let key in icons) {
-        if (lowerName.includes(key)) {
-          return icons[key];
-        }
-      }
+      
+      // Check for more specific matches first to avoid conflicts
+      if (lowerName.includes('headphone')) return '🎧';
+      if (lowerName.includes('laptop')) return '💻';
+      if (lowerName.includes('tablet')) return '📱';
+      if (lowerName.includes('phone')) return '📱';
+      if (lowerName.includes('smartwatch') || lowerName.includes('watch')) return '⌚';
+      if (lowerName.includes('keyboard')) return '⌨️';
+      if (lowerName.includes('mouse')) return '🖱️';
+      if (lowerName.includes('camera')) return '📷';
+      if (lowerName.includes('speaker')) return '🔊';
+      if (lowerName.includes('monitor')) return '🖥️';
+      
       return '📦';
     },
 

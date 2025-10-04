@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\OrderItem;
 
 class CartController extends Controller
 {
-    // show cart page
     public function index()
     {
         $cart = session()->get('cart', []);
@@ -22,7 +22,7 @@ class CartController extends Controller
         return view('cart', compact('cart', 'total'));
     }
 
-    // add product to cart
+    //add product
     public function add(Request $request, $id)
     {
         $product = Product::find($id);
@@ -32,7 +32,6 @@ class CartController extends Controller
 
         $cart = session()->get('cart', []);
 
-        // if product exists in cart, increase qty
         if (isset($cart[$id])) {
             $cart[$id]['qty'] += 1;
         } else {
@@ -46,11 +45,10 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        // optional flash message
         return redirect()->back()->with('success', $product->name.' added to cart.');
     }
 
-    // update quantity
+    //update quantity
     public function update(Request $request, $id)
     {
         $qty = (int) $request->input('qty', 1);
@@ -66,7 +64,7 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Cart updated.');
     }
 
-    // remove item
+    //remove item
     public function remove(Request $request, $id)
     {
         $cart = session()->get('cart', []);
@@ -77,14 +75,14 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
     }
 
-    // clear cart (helper)
+    //clear cart
     public function clear()
     {
         session()->forget('cart');
         return redirect()->route('cart.index')->with('success', 'Cart cleared.');
     }
     
-    // place order
+    //place order
     public function placeOrder(Request $request)
     {
         $cart = session()->get('cart', []);
@@ -92,24 +90,44 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cart is empty.');
         }
 
-        // Create order
-        $order = Order::create([
-            'customer_name' => 'Guest User', // later: use auth user
-            'status' => 'pending',
-        ]);
-
-        // Save items
-        foreach ($cart as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item['id'],
-                'quantity' => $item['qty'],
-                'price' => $item['price'],
+        DB::beginTransaction();
+        
+        try {
+            $totalAmount = 0;
+            foreach ($cart as $item) {
+                $totalAmount += $item['price'] * $item['qty'];
+            }
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'customer_name' => Auth::user()->name,
+                'total_amount' => $totalAmount,
+                'status' => 'pending',
             ]);
+
+            foreach ($cart as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['id'],
+                    'quantity' => $item['qty'],
+                    'price' => $item['price'],
+                ]);
+
+                $product = Product::find($item['id']);
+                if ($product && $product->stock >= $item['qty']) {
+                    $product->decrement('stock', $item['qty']);
+                }
+            }
+
+            DB::commit();
+
+            session()->forget('cart');
+
+            return redirect()->route('orders.index')->with('success', 'Order placed successfully! Order #' . $order->id);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()->route('cart.index')->with('error', 'Failed to place order. Please try again.');
         }
-
-        session()->forget('cart');
-
-        return redirect()->route('orders.index')->with('success', 'Order placed successfully!');
     }
 }
