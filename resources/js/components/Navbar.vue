@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="/">E-Commerce</a>
+      <a class="navbar-brand fw-bold" href="/catalogue">E-Commerce</a>
 
       <div class="d-flex align-items-center ms-auto">
         <form v-if="showSearch" @submit.prevent="searchProducts" class="d-flex me-3">
@@ -14,9 +14,9 @@
           <button type="submit" class="btn btn-sm btn-primary">Search</button>
         </form>
 
-        <a href="/" class="btn btn-outline-secondary text-dark me-2">Catalogue</a>
+        <a href="/catalogue" class="btn btn-outline-secondary text-dark me-2">Catalogue</a>
         <a href="/orders" class="btn btn-outline-secondary text-dark me-2">Orders</a>
-        <a href="/cart" class="btn btn-outline-primary position-relative">
+        <a href="/cart" class="btn btn-outline-primary position-relative me-2">
           🛒
           <span 
             v-if="cartCount > 0" 
@@ -25,6 +25,11 @@
             {{ cartCount }}
           </span>
         </a>
+        
+        <form method="POST" action="/logout" style="display: inline;">
+          <input type="hidden" name="_token" :value="csrfToken">
+          <button type="submit" class="btn btn-outline-danger">Logout</button>
+        </form>
       </div>
     </div>
   </nav>
@@ -45,16 +50,15 @@ export default {
   },
   data() {
     return {
-      searchQuery: this.getCurrentSearchQuery()
+      searchQuery: this.getCurrentSearchQuery(),
+      csrfToken: document.querySelector('meta[name="csrf-token"]')?.content || ''
     }
   },
   methods: {
     searchProducts() {
-      // Redirect to catalogue with search query
       window.location.href = `/?search=${encodeURIComponent(this.searchQuery)}`;
     },
     getCurrentSearchQuery() {
-      // Preserve search query in input when coming back from search
       const params = new URLSearchParams(window.location.search);
       return params.get("search") || "";
     }

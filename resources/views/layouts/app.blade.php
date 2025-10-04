@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Hidden input to pass initial cart count to JS -->
     <input type="hidden" id="initial-cart-count" value="{{ $cartCount ?? 0 }}">
 
     <div id="app">

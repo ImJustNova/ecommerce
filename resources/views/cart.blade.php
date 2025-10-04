@@ -29,7 +29,7 @@
                 @foreach($cart as $item)
                 <tr>
                     <td>{{ $item['name'] }}</td>
-                    <td>${{ number_format($item['price'], 2) }}</td>
+                    <td>RM {{ number_format($item['price'], 2) }}</td>
                     <td>
                         <form method="POST" action="{{ route('cart.update', $item['id']) }}" class="d-flex">
                             @csrf
@@ -37,7 +37,7 @@
                             <button type="submit" class="btn btn-sm btn-primary">Update</button>
                         </form>
                     </td>
-                    <td>${{ number_format($item['price'] * $item['qty'], 2) }}</td>
+                    <td>RM {{ number_format($item['price'] * $item['qty'], 2) }}</td>
                     <td>
                         <form method="POST" action="{{ route('cart.remove', $item['id']) }}">
                             @csrf
@@ -50,7 +50,7 @@
         </table>
 
         <div class="d-flex justify-content-between align-items-center">
-            <h4>Total: ${{ number_format($total, 2) }}</h4>
+            <h4>Total: RM {{ number_format($total, 2) }}</h4>
             <div>
                 <form method="POST" action="{{ route('cart.clear') }}" class="d-inline">
                     @csrf

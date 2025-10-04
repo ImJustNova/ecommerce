@@ -21,7 +21,7 @@
             <h5 class="product-title">{{ product.name }}</h5>
             
             <div class="product-price">
-              <span class="price-currency">$</span>
+              <span class="price-currency">RM</span>
               <span class="price-amount">{{ formatPrice(product.price) }}</span>
             </div>
 

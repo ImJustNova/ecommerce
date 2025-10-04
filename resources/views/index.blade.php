@@ -30,7 +30,7 @@
                     <td>
                         <ul>
                             @foreach($order->items as $item)
-                                <li>{{ $item->product->name }} (x{{ $item->quantity }}) - ${{ number_format($item->price,2) }}</li>
+                                <li>{{ $item->product->name }} (x{{ $item->quantity }}) - RM {{ number_format($item->price,2) }}</li>
                             @endforeach
                         </ul>
                     </td>
