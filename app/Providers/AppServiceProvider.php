@@ -8,22 +8,16 @@ use Illuminate\Support\Facades\Session;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         View::composer('*', function ($view) {
             $cart = session()->get('cart', []);
-            $cartCount = count($cart); // number of unique items
+            $cartCount = count($cart);
             $view->with('cartCount', $cartCount);
         });
     }

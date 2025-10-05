@@ -11,10 +11,9 @@ class OrderController extends Controller
 {
     public function index()
     {
-        // Get only the logged-in user's orders with related items and products
         $orders = Order::where('user_id', Auth::id())
                       ->with('items.product')
-                      ->orderBy('created_at', 'desc') // Show newest orders first
+                      ->orderBy('created_at', 'desc')
                       ->get();
         
     return view('index', compact('orders'));
@@ -24,7 +23,6 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
         
-        // Optional: Check if order belongs to current user
         if ($order->user_id !== Auth::id()) {
             return redirect()->route('orders.index')->with('error', 'Unauthorized access.');
         }

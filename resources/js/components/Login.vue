@@ -206,7 +206,6 @@ export default {
   z-index: 1;
 }
 
-/* header */
 .login-header {
   text-align: center;
   margin-bottom: 40px;
@@ -230,7 +229,6 @@ export default {
   margin: 0;
 }
 
-/* form */
 .login-form {
   margin-bottom: 24px;
 }
@@ -275,7 +273,6 @@ export default {
   margin-top: 6px;
 }
 
-/* password oggle */
 .password-wrapper {
   position: relative;
 }
@@ -298,7 +295,6 @@ export default {
   opacity: 1;
 }
 
-/* checkbox */
 .form-group-inline {
   margin-bottom: 24px;
 }
@@ -323,7 +319,6 @@ export default {
   font-size: 0.875rem;
 }
 
-/* alert */
 .alert {
   padding: 12px 16px;
   border-radius: 8px;
@@ -337,7 +332,6 @@ export default {
   border: 1px solid #f5c6cb;
 }
 
-/* submit button */
 .btn-login {
   width: 100%;
   padding: 16px;
@@ -370,7 +364,6 @@ export default {
   color: transparent;
 }
 
-/* loading */
 .spinner {
   position: absolute;
   left: 50%;
@@ -388,7 +381,6 @@ export default {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* footer */
 .login-footer {
   text-align: center;
 }
@@ -409,7 +401,6 @@ export default {
   text-decoration: underline;
 }
 
-/* background */
 .background-decoration {
   position: absolute;
   top: 0;

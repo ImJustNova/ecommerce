@@ -14,7 +14,6 @@ class CartController extends Controller
     public function index()
     {
         $cart = session()->get('cart', []);
-        // cart is array: productId => ['id'=>..., 'name'=>..., 'price'=>..., 'qty'=>...]
         $total = 0;
         foreach ($cart as $item) {
             $total += $item['price'] * $item['qty'];

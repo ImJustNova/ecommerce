@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     searchProducts() {
-      window.location.href = `/?search=${encodeURIComponent(this.searchQuery)}`;
+      window.location.href = `/catalogue?search=${encodeURIComponent(this.searchQuery)}`;
     },
     getCurrentSearchQuery() {
       const params = new URLSearchParams(window.location.search);

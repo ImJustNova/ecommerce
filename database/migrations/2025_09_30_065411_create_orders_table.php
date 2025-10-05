@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Link to users table
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('customer_name');
-            $table->decimal('total_amount', 10, 2)->default(0); // Store total amount
-            $table->string('status')->default('pending'); // pending, processing, completed, cancelled
-            $table->timestamps(); // This creates 'created_at' (purchase date) and 'updated_at'
+            $table->decimal('total_amount', 10, 2)->default(0);
+            $table->string('status')->default('pending');
+            $table->timestamps();
         });
     }
 

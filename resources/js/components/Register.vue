@@ -1,16 +1,13 @@
 <template>
   <div class="login-wrapper">
     <div class="login-container">
-      <!-- Logo/Brand -->
-      <div class="login-header">
+            <div class="login-header">
         <div class="brand-icon">🛒</div>
         <h1 class="brand-title">E-Commerce</h1>
         <p class="brand-subtitle">Create your account</p>
       </div>
 
-      <!-- Register Form -->
       <form @submit.prevent="handleRegister" class="login-form">
-        <!-- Name Input -->
         <div class="form-group">
           <label for="name" class="form-label">Full Name</label>
           <input 
@@ -25,7 +22,6 @@
           <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
         </div>
 
-        <!-- Email Input -->
         <div class="form-group">
           <label for="email" class="form-label">Email Address</label>
           <input 
@@ -40,7 +36,6 @@
           <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
         </div>
 
-        <!-- Password Input -->
         <div class="form-group">
           <label for="password" class="form-label">Password</label>
           <div class="password-wrapper">
@@ -64,7 +59,6 @@
           <span v-if="errors.password" class="error-message">{{ errors.password }}</span>
         </div>
 
-        <!-- Confirm Password Input -->
         <div class="form-group">
           <label for="password_confirmation" class="form-label">Confirm Password</label>
           <div class="password-wrapper">
@@ -88,12 +82,10 @@
           <span v-if="errors.password_confirmation" class="error-message">{{ errors.password_confirmation }}</span>
         </div>
 
-        <!-- Error Alert -->
         <div v-if="registerError" class="alert alert-error">
           {{ registerError }}
         </div>
 
-        <!-- Submit Button -->
         <button 
           type="submit" 
           class="btn-login"
@@ -105,7 +97,6 @@
         </button>
       </form>
 
-      <!-- Footer Links -->
       <div class="login-footer">
         <p class="footer-text">
           Already have an account? 
@@ -114,7 +105,6 @@
       </div>
     </div>
 
-    <!-- Decorative Background -->
     <div class="background-decoration">
       <div class="decoration-circle circle-1"></div>
       <div class="decoration-circle circle-2"></div>
@@ -151,13 +141,11 @@ export default {
       this.errors = { name: '', email: '', password: '', password_confirmation: '' };
       let isValid = true;
 
-      // Name validation
       if (!this.form.name || this.form.name.trim().length < 2) {
         this.errors.name = 'Name must be at least 2 characters';
         isValid = false;
       }
 
-      // Email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!this.form.email) {
         this.errors.email = 'Email is required';
@@ -167,7 +155,6 @@ export default {
         isValid = false;
       }
 
-      // Password validation
       if (!this.form.password) {
         this.errors.password = 'Password is required';
         isValid = false;
@@ -176,7 +163,6 @@ export default {
         isValid = false;
       }
 
-      // Confirm password validation
       if (!this.form.password_confirmation) {
         this.errors.password_confirmation = 'Please confirm your password';
         isValid = false;
@@ -189,10 +175,8 @@ export default {
     },
 
     async handleRegister() {
-      // Clear previous errors
       this.registerError = '';
 
-      // Validate form
       if (!this.validateForm()) {
         return;
       }
@@ -200,7 +184,6 @@ export default {
       this.isLoading = true;
 
       try {
-        // Get CSRF token
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
         
         if (!csrfToken) {
@@ -209,7 +192,6 @@ export default {
           return;
         }
 
-        // Send register request
         const response = await fetch('/register', {
           method: 'POST',
           headers: {
@@ -228,12 +210,9 @@ export default {
         const data = await response.json();
 
         if (response.ok) {
-          // Success - redirect to catalogue
           window.location.href = data.redirect || '/catalogue';
         } else {
-          // Show error message
           if (data.errors) {
-            // Laravel validation errors
             this.errors = { ...this.errors, ...data.errors };
             this.registerError = 'Please fix the errors above';
           } else {
@@ -252,7 +231,6 @@ export default {
 </script>
 
 <style scoped>
-/* Main Wrapper */
 .login-wrapper {
   min-height: 100vh;
   display: flex;
@@ -264,7 +242,6 @@ export default {
   overflow: hidden;
 }
 
-/* Login Container */
 .login-container {
   background: white;
   border-radius: 24px;
@@ -276,7 +253,6 @@ export default {
   z-index: 1;
 }
 
-/* Header */
 .login-header {
   text-align: center;
   margin-bottom: 40px;
@@ -300,7 +276,6 @@ export default {
   margin: 0;
 }
 
-/* Form */
 .login-form {
   margin-bottom: 24px;
 }
@@ -345,7 +320,6 @@ export default {
   margin-top: 6px;
 }
 
-/* Password Toggle */
 .password-wrapper {
   position: relative;
 }
@@ -368,7 +342,6 @@ export default {
   opacity: 1;
 }
 
-/* Alert */
 .alert {
   padding: 12px 16px;
   border-radius: 8px;
@@ -382,7 +355,6 @@ export default {
   border: 1px solid #f5c6cb;
 }
 
-/* Submit Button */
 .btn-login {
   width: 100%;
   padding: 16px;
@@ -415,7 +387,6 @@ export default {
   color: transparent;
 }
 
-/* Loading Spinner */
 .spinner {
   position: absolute;
   left: 50%;
@@ -433,7 +404,6 @@ export default {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Footer */
 .login-footer {
   text-align: center;
 }
@@ -454,7 +424,6 @@ export default {
   text-decoration: underline;
 }
 
-/* Background Decoration */
 .background-decoration {
   position: absolute;
   top: 0;
@@ -501,7 +470,6 @@ export default {
   50% { transform: translateY(-20px) rotate(180deg); }
 }
 
-/* Responsive */
 @media (max-width: 576px) {
   .login-container {
     padding: 32px 24px;

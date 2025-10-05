@@ -7,7 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AuthController;
 
-// Default route - redirect based on authentication
+//login and redirect
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('catalogue');

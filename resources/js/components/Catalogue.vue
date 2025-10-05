@@ -1,22 +1,19 @@
 <template>
   <div>
-    <!-- Empty State -->
     <div v-if="products.length === 0" class="empty-state">
       <div class="empty-icon">📦</div>
       <h3>No Products Available</h3>
       <p class="text-muted">Check back soon for new items!</p>
     </div>
 
-    <!-- Products Grid -->
     <div v-else class="row g-4">
       <div v-for="product in products" :key="product.id" class="col-lg-4 col-md-6">
         <div class="product-card">
-          <!-- Product Icon/Image Placeholder -->
+
           <div class="product-image">
             <div class="product-icon">{{ getProductIcon(product.name) }}</div>
           </div>
 
-          <!-- Product Details -->
           <div class="product-body">
             <h5 class="product-title">{{ product.name }}</h5>
             
@@ -25,7 +22,6 @@
               <span class="price-amount">{{ formatPrice(product.price) }}</span>
             </div>
 
-            <!-- Stock Badge -->
             <div class="stock-info">
               <span 
                 class="stock-badge" 
@@ -36,7 +32,6 @@
               </span>
             </div>
 
-            <!-- Add to Cart Button -->
             <button 
               class="btn-add-cart"
               :class="{ 'btn-loading': loadingProducts[product.id] }"
@@ -53,7 +48,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <transition name="toast">
       <div v-if="showToast" class="toast-notification" :class="toastType">
         {{ toastMessage }}
@@ -97,7 +91,6 @@ export default {
       
       const lowerName = name.toLowerCase();
       
-      // Check for more specific matches first to avoid conflicts
       if (lowerName.includes('headphone')) return '🎧';
       if (lowerName.includes('laptop')) return '💻';
       if (lowerName.includes('tablet')) return '📱';
@@ -132,7 +125,6 @@ export default {
       this.loadingProducts[productId] = true;
 
       try {
-        // Get CSRF token
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
         
         if (!csrfToken) {
@@ -153,7 +145,7 @@ export default {
 
         if (response.ok) {
           this.showToastNotification('Product added to cart! 🎉', 'success');
-          // Update cart count globally
+
           if (window.cartState) {
             window.cartState.count++;
           }
@@ -183,7 +175,6 @@ export default {
 </script>
 
 <style scoped>
-/* Empty State */
 .empty-state {
   text-align: center;
   padding: 80px 20px;
@@ -202,7 +193,6 @@ export default {
   margin-bottom: 10px;
 }
 
-/* Product Card */
 .product-card {
   background: white;
   border-radius: 16px;
@@ -219,7 +209,6 @@ export default {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* Product Image/Icon */
 .product-image {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 40px;
@@ -234,7 +223,6 @@ export default {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
-/* Product Body */
 .product-body {
   padding: 24px;
   flex: 1;
@@ -249,7 +237,6 @@ export default {
   margin-bottom: 16px;
 }
 
-/* Price */
 .product-price {
   display: flex;
   align-items: center;
@@ -269,7 +256,6 @@ export default {
   color: #212529;
 }
 
-/* Stock Info */
 .stock-info {
   margin-bottom: 20px;
 }
@@ -318,7 +304,6 @@ export default {
   background: #dc3545;
 }
 
-/* Add to Cart Button */
 .btn-add-cart {
   width: 100%;
   padding: 14px 24px;
@@ -354,7 +339,6 @@ export default {
   color: transparent;
 }
 
-/* Loading Spinner */
 .spinner {
   position: absolute;
   left: 50%;
@@ -372,7 +356,6 @@ export default {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Toast Notification */
 .toast-notification {
   position: fixed;
   bottom: 30px;
@@ -397,7 +380,6 @@ export default {
   border-left: 4px solid #dc3545;
 }
 
-/* Toast Animation */
 .toast-enter-active, .toast-leave-active {
   transition: all 0.3s ease;
 }
@@ -412,7 +394,6 @@ export default {
   opacity: 0;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .product-image {
     min-height: 160px;

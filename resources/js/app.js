@@ -4,12 +4,11 @@ import Catalogue from './components/Catalogue.vue'
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 
-// Create a shared reactive state for cart
 const cartState = reactive({
     count: parseInt(document.getElementById('initial-cart-count')?.value || 0)
 })
 
-// Mount navbar (if exists)
+//navbar(header)
 const navbarElement = document.getElementById('app')
 if (navbarElement) {
     const navbarApp = createApp({
@@ -21,7 +20,7 @@ if (navbarElement) {
     navbarApp.mount('#app')
 }
 
-// Mount catalogue (if exists)
+//catalogue
 const catalogueElement = document.getElementById('catalogue-app')
 if (catalogueElement) {
     const catalogueApp = createApp({
@@ -33,7 +32,7 @@ if (catalogueElement) {
     catalogueApp.mount('#catalogue-app')
 }
 
-// Mount login (if exists)
+//login
 const loginElement = document.getElementById('login-app')
 if (loginElement) {
     const loginApp = createApp({})
@@ -41,7 +40,7 @@ if (loginElement) {
     loginApp.mount('#login-app')
 }
 
-// Mount register (if exists)
+//register
 const registerElement = document.getElementById('register-app')
 if (registerElement) {
     const registerApp = createApp({})
@@ -49,5 +48,4 @@ if (registerElement) {
     registerApp.mount('#register-app')
 }
 
-// Make cartState globally available
 window.cartState = cartState
